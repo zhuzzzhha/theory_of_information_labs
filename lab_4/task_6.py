@@ -4,7 +4,7 @@ import math
 import numpy as np
 
 
-p_a = np.array([1/3]*3)
+p_a = np.array([0.2, 0.3, 0.5])
 
 p_b_given_a= np.array([[0.97, 0.015, 0.015],
      [0.015, 0.97, 0.015],
@@ -12,14 +12,18 @@ p_b_given_a= np.array([[0.97, 0.015, 0.015],
 
 # энтропия при равных априорных вероятностях
 
-def entropy(p):
-    res = 0
-    for i in range(len(p)):
-        for j in range(len(p[i])):
-            if p[i][j] > 0:
-                res -= p[i][j] * math.log2(p[i][j])
-                
-    return res/len(p[0])
+def entropy(prior_probabilities, channel_matrix):
+    entropy = 0
+    
+    for i in range(len(prior_probabilities)):
+        for j in range(len(channel_matrix)):
+            prior_prob = prior_probabilities[i]
+            conditional_prob = channel_matrix[i][j]
+            
+            if prior_prob != 0 and conditional_prob != 0:
+                entropy += prior_prob * conditional_prob * math.log2(1 / conditional_prob)
+
+    return entropy
     
 # энтропия источника
     
@@ -37,7 +41,7 @@ p_b = b_probabilities(p_a, p_b_given_a)
 H_b =  -sum([p_b[i]*math.log2(p_b[i]) for i in range(len(p_b))])
 
 #условная энтропия
-H_b_given_a = entropy(p_b_given_a)
+H_b_given_a = entropy(p_a, p_b_given_a)
 
 
 info =  H_b - H_b_given_a
