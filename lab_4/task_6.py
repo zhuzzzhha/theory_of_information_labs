@@ -10,7 +10,7 @@ p_b_given_a= np.array([[0.97, 0.015, 0.015],
      [0.015, 0.97, 0.015],
      [0.015, 0.015, 0.97]])
 
-# энтропия при равных априорных вероятностях
+# энтропия 
 
 def entropy(prior_probabilities, channel_matrix):
     entropy = 0
